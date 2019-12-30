@@ -12,6 +12,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
   List dataJSON;
   String kd='';
   String ta='';
+  String cekload='';
   bool status=false;
   SharedPreferences prefs;
 
@@ -71,6 +72,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
   var no;
 
   ambildetail(String id) async{
+    cekload=id;
     _onButtonElse();
       http.Response detail = await http.get(
       Uri.encodeFull("http://api-sia.uty.ac.id/absensi"), headers: {"Accept": "application/json","nim":prefs.getString('NimSes'),"q":"SF27xMjAL178GOUgDoQ1GzL6v4jGk99H","k":id}
@@ -103,6 +105,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
       pert=[pert1,pert2,pert3,pert4,pert5,pert6,pert7,pert8,pert9,pert10,pert11,pert12,pert13,pert14];
       no=['1','2','3','4','5','6','7','8','9','10','11','12','13','14'];
       Navigator.pop(context);
+      cekload='';
       _onButtonPressed();
       
     }
@@ -136,26 +139,30 @@ class _AbsensiPageState extends State<AbsensiPage> {
 
 
   void _onButtonElse(){
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          height: 100.0,
-          color: Color(0xFF737373),
-          child : Container(
-            child: _isikosong() ,
-            decoration: BoxDecoration(
-              color: Theme.of(context).canvasColor,
-              borderRadius: BorderRadius.only(
-                topLeft: const Radius.circular(10),
-                topRight: const Radius.circular(10),
-              ) 
+    showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (_) => Dialog(
+      shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(50.0)),
+      child: Container(
+        alignment: FractionalOffset.center,
+        height: 80.0,
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(width: 20.0,),
+            Padding(
+              padding: new EdgeInsets.only(left: 10.0),
+              child: new Text("Sedang Memuat..."),
             ),
-          ),
-        );
-      },
-      isScrollControlled: true,
-    );
+          ],
+        ),
+      ),
+    ));
   }
 
   Container _isikosong(){
@@ -222,7 +229,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                       fontSize: 13.0)),
             ),
             SizedBox(height: 30.0,),
-            for(var i=0; i<=10;i++)
+            for(var i=0; i<=13;i++)
             Padding(
             padding: EdgeInsets.only(left: 50.0, right: 50.0, top: 0.0),
             child: Column(
@@ -248,7 +255,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                         // ''+jml.toString(),
                         pert[i],
                         style: TextStyle(
-                            color: Colors.black,
+                            color: pert[i]=='Hadir' ? Colors.green : pert[i]=='Alpha' ? Colors.red : pert[i]=='Sakit' ? Colors.orange[300] : Colors.orange[300] ,
                             fontSize: 13.0,
                             fontWeight: FontWeight.bold),
                       )
@@ -396,6 +403,11 @@ class _AbsensiPageState extends State<AbsensiPage> {
                                     ],
                                   ),
                                 ),
+                                if(dataJSON[i]['kd_mengajar']==cekload)
+                                Center(
+                                    child : CircularProgressIndicator(backgroundColor: Color.fromRGBO(77, 77, 255,1),valueColor:new AlwaysStoppedAnimation<Color>(Colors.white),)
+                                  )
+                                else
                                 Container(
                                 width: 90,
                                 height: 30,
@@ -414,6 +426,7 @@ class _AbsensiPageState extends State<AbsensiPage> {
                                           // Navigator.of(context).push(MaterialPageRoute(
                                           //   builder: (BuildContext context) => InformasiPage()
                                           // ));
+                                          // cekload=dataJSON[i]['kd_mengajar'];
                                           ambildetail(dataJSON[i]['kd_mengajar']);
                                           
 

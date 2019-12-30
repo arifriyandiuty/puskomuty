@@ -77,6 +77,14 @@ class _RekapPageState extends State<RekapPage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
+              child: Text('Rekap Mahasiswa',
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(0.7),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30.0)),
+            ),
             if(ipk=='')
             Container(
               padding: EdgeInsets.symmetric(vertical: 230.0),
@@ -89,14 +97,6 @@ class _RekapPageState extends State<RekapPage> {
             else
             Column(
             children: <Widget>[
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 25.0, vertical: 20.0),
-              child: Text('Rekap Mahasiswa',
-                  style: TextStyle(
-                      color: Colors.black.withOpacity(0.7),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 30.0)),
-            ),
             Padding(
               padding: EdgeInsets.only(top: 0.0, right: 25.0, left: 25.0, bottom: 20.0),
               
